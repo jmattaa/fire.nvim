@@ -39,7 +39,7 @@ function M.open_floating(opts)
     return { buf = buf, win = win }
 end
 
----@param pos "left" | "right" | "top" | "bottom"
+---@param pos winpos
 ---@return { buf: integer, win: integer }
 function M.open(pos)
     if pos == "left" then

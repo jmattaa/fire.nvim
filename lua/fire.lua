@@ -1,20 +1,25 @@
 -- FIRE 🔥 fire commands at neovim!!
---
--- todo maybe make this a plugin?
--- the .firecmds file contains a list of commands to run with the value of the
--- keybinding in opts (the name of the command) being the key in the
--- .firecmds file
--- NOTE: stop a process with :bd!
 local M = {}
 
 local term = require("term")
 
+---@alias winpos "left" | "right" | "top" | "bottom"
+
 -- default options but you could defenetly add other scripts with other names
+---@class fireopts
+---@field leader string
+---@field win {
+---pos: winpos,
+---size: number,
+---kill_buffer_on_close: boolean,
+---}
+---@field commands table
 M.options = {
     leader = "<leader>f",
-    window = {
+    win = {
         pos = "bottom",
         size = 10,
+        kill_buffer_on_close = true
     },
     commands = {
         r = "run",
@@ -69,7 +74,7 @@ local function set_mappings()
                 file:close()
             end
 
-            local err = term.runcmd(command_to_run, M.options.window)
+            local err = term.runcmd(command_to_run, M.options)
             if not err.ok then
                 vim.notify(err.msg, vim.log.levels.ERROR)
             end
@@ -77,6 +82,7 @@ local function set_mappings()
     end
 end
 
+---@param opts fireopts
 function M.setup(opts)
     if opts then
         if not opts.leader then opts.leader = M.options.leader end -- ensure leader
