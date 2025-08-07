@@ -12,30 +12,36 @@ local term = require("term")
 -- default options but you could defenetly add other scripts with other names
 M.options = {
     leader = "<leader>f",
-    winpos = "left",
-    r = "run",
-    b = "build",
-    t = "test",
-    d = "debug",
+    window = {
+        pos = "bottom",
+        size = 10,
+    },
+    commands = {
+        r = "run",
+        b = "build",
+        t = "test",
+        d = "debug",
+    }
 }
 
-function M.setup(opts)
-    if opts then
-        if not opts.leader then opts.leader = M.options.leader end -- ensure leader
-        M.options = opts
-    end
-
-    -- set up mappings for the commands, find the command in .firecmds file
-    for k, v in pairs(M.options) do
-        if k == "leader" then goto continue end
-
+local function set_mappings()
+    for k, v in pairs(M.options.commands) do
         vim.keymap.set("n", M.options.leader .. k, function()
             local cwd = vim.fn.getcwd()
             local filepath = cwd .. "/.firecmds"
             local file = io.open(filepath, "r")
+
             if not file then
-                vim.notify(".firecmds file not found", vim.log.levels.ERROR)
-                return
+                file = io.open(filepath, "w")
+                if not file then
+                    vim.notify("Unable to create " .. filepath, vim.log.levels.ERROR)
+                    return
+                end
+                file:close()
+                file = io.open(filepath, "r")
+                if not file then
+                    return
+                end
             end
 
             local commands = {}
@@ -49,15 +55,35 @@ function M.setup(opts)
 
             local command_to_run = commands[v]
             if not command_to_run then
-                vim.notify("Command '" .. v .. "' not found in .firecmds", vim.log.levels.ERROR)
-                return
+                command_to_run =
+                    vim.fn.input("Command for " .. v .. ": ")
+                if command_to_run == "" then
+                    return
+                end
+                file = io.open(filepath, "a")
+                if not file then
+                    vim.notify("Unable to open " .. filepath, vim.log.levels.ERROR)
+                    return
+                end
+                file:write(v .. " " .. command_to_run .. "\n")
+                file:close()
             end
 
-            term.runcmd(command_to_run, M.options.winpos)
+            local err = term.runcmd(command_to_run, M.options.window)
+            if not err.ok then
+                vim.notify(err.msg, vim.log.levels.ERROR)
+            end
         end)
-        ::continue::
     end
 end
 
-return M
+function M.setup(opts)
+    if opts then
+        if not opts.leader then opts.leader = M.options.leader end -- ensure leader
+        M.options = opts
+    end
 
+    set_mappings()
+end
+
+return M
