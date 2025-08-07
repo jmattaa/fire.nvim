@@ -3,17 +3,17 @@ local M = {}
 
 local term = require("term")
 
----@alias winpos "left" | "right" | "top" | "bottom"
+---@alias winpos "left" | "right" | "top" | "bottom" | "float"
 
 -- default options but you could defenetly add other scripts with other names
 ---@class fireopts
----@field leader string
+---@field leader string?
 ---@field win {
----pos: winpos,
----size: number,
----kill_buffer_on_close: boolean,
----}
----@field commands table
+---pos: winpos?,
+---size: number?,
+---kill_buffer_on_close: boolean?,
+---}?
+---@field commands table?
 M.options = {
     leader = "<leader>f",
     win = {
@@ -85,8 +85,7 @@ end
 ---@param opts fireopts
 function M.setup(opts)
     if opts then
-        if not opts.leader then opts.leader = M.options.leader end -- ensure leader
-        M.options = opts
+        for k, v in pairs(opts) do M.options[k] = v end
     end
 
     set_mappings()
