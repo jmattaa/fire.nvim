@@ -6,6 +6,13 @@
 
 </div>
 
+- [fire.nvim 🔥](#firenvim-)
+   * [What is this? ](#what-is-this)
+   * [Installation](#installation)
+   * [Configuration](#configuration)
+   * [Usage](#usage)
+
+
 ## What is this? 
 It's a simple plugin to quickly open a term window and run commands in it.
 And thats it! The idea came from the em**s 
