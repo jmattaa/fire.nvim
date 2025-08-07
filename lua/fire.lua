@@ -82,10 +82,22 @@ local function set_mappings()
     end
 end
 
+---@param defaults table
+---@param user table
+local function tbl_merge(defaults, user)
+    for k, v in pairs(user) do
+        if type(v) == "table" and type(defaults[k]) == "table" then
+            tbl_merge(defaults[k], v)
+        else
+            defaults[k] = v
+        end
+    end
+end
+
 ---@param opts fireopts
 function M.setup(opts)
     if opts then
-        for k, v in pairs(opts) do M.options[k] = v end
+        tbl_merge(M.options, opts)
     end
 
     set_mappings()
