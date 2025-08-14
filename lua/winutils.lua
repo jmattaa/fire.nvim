@@ -34,8 +34,6 @@ local function open_floating(opts)
         }
     )
 
-    vim.wo[win].winhighlight = "Normal:Normal,FloatBorder:Normal"
-
     return { buf = buf, win = win }
 end
 

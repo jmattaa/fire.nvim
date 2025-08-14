@@ -24,7 +24,8 @@ function M.runcmd(cmd, opts)
         vim.api.nvim_win_set_height(winbuf.win, opts.win.size)
     end
 
-    vim.cmd("term " .. cmd)
+    vim.api.nvim_set_current_buf(winbuf.buf)
+    vim.fn.jobstart(cmd)
     if opts.win.kill_buffer_on_close then vim.bo.bufhidden = "wipe" end
 
     return { ok = true, msg = "" }
