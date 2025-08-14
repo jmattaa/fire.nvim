@@ -16,16 +16,12 @@ function M.runcmd(cmd, opts)
         return { ok = false, msg = "invalid winpos" }
     end
 
-    local winbuf
-    if opts.win.pos == "float" then
-        winbuf = winutils.open_floating()
-    else
-        winbuf = winutils.open(opts.win.pos)
-        if opts.win.pos == "left" or opts.win.pos == "right" then
-            vim.api.nvim_win_set_width(winbuf.win, opts.win.size)
-        else
-            vim.api.nvim_win_set_height(winbuf.win, opts.win.size)
-        end
+    local winbuf = winutils.open(opts.win.pos)
+    if opts.win.pos == "left" or opts.win.pos == "right" then
+        vim.api.nvim_win_set_width(winbuf.win, opts.win.size)
+    end
+    if opts.win.pos == "top" or opts.win.pos == "bottom" then
+        vim.api.nvim_win_set_height(winbuf.win, opts.win.size)
     end
 
     vim.cmd("term " .. cmd)

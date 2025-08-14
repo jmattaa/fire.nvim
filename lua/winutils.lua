@@ -11,7 +11,7 @@ local M = {}
 --                 height if `height` and `width` are not explicitly set.
 --                 Defaults to 0.6
 ---@return { buf: integer, win: integer }
-function M.open_floating(opts)
+local function open_floating(opts)
     opts = opts or {}
 
     local width = opts.width or math.floor(vim.o.columns * (opts.p or 0.6))
@@ -42,19 +42,12 @@ end
 ---@param pos winpos
 ---@return { buf: integer, win: integer }
 function M.open(pos)
-    if pos == "left" then
-        vim.api.nvim_command("topleft vsplit")
-    elseif pos == "right" then
-        vim.api.nvim_command("botright vsplit")
-    elseif pos == "top" then
-        vim.api.nvim_command("topleft split")
-    elseif pos == "bottom" then
-        vim.api.nvim_command("botright split")
+    if pos == "float" then
+        return open_floating()
     end
 
-    -- Get the current buffer and window IDs
-    local win = vim.api.nvim_get_current_win()
-    local buf = vim.api.nvim_get_current_buf()
+    local buf = vim.api.nvim_create_buf(false, true)
+    local win = vim.api.nvim_open_win(buf, true, { split = pos })
 
     return { buf = buf, win = win }
 end
