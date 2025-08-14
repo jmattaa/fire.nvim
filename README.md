@@ -26,8 +26,8 @@ Note that you must call the setup function for the plugin to work
 Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
 ```lua
-use('jmattaa/fire.nvim')
-require('fire').setup {} -- uses default config
+use("jmattaa/fire.nvim")
+require("fire").setup {} -- uses default config
 ```
 
 Using [lazy.nvim](https://github.com/folke/lazy.nvim):
@@ -36,7 +36,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 return {
     "jmattaa/fire.nvim",
     config = function()
-        require('fire').setup {}
+        require("fire").setup {}
     end
 }
 ```
@@ -45,14 +45,14 @@ return {
 
 here is the default configuration
 ```lua
-require('fire').setup {
+require("fire").setup {
     leader = "<leader>f", -- the prefix key for triggering fire commands (e.g., <leader>fr for "run")
 
     win = {
         pos = "bottom", -- position of the terminal window:
-                        -- "top", "bottom", "left", "right", or "float"
+                        -- "above", "below", "left", "right", or "float"
         size = 10,      -- size of the terminal window:
-                        -- if the window is horizontal (top/bottom), size = height in lines
+                        -- if the window is horizontal (above/below), size = height in lines
                         -- if vertical (left/right), size = width in columns
                         -- ignored if pos = "float"
         kill_buffer_on_close = true -- if true, the terminal buffer will be deleted when the window is closed.

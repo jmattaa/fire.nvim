@@ -3,7 +3,7 @@ local M = {}
 
 local term = require("term")
 
----@alias winpos "left" | "right" | "top" | "bottom" | "float"
+---@alias winpos "left" | "right" | "above" | "below" | "float"
 
 -- default options but you could defenetly add other scripts with other names
 ---@class fireopts
@@ -17,7 +17,7 @@ local term = require("term")
 M.options = {
     leader = "<leader>f",
     win = {
-        pos = "bottom",
+        pos = "below",
         size = 10,
         kill_buffer_on_close = true
     },
