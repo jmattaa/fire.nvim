@@ -25,7 +25,15 @@ function M.runcmd(cmd, opts)
     end
 
     vim.api.nvim_set_current_buf(winbuf.buf)
-    vim.fn.jobstart(cmd, {term = true})
+    vim.fn.termopen(cmd, {
+        on_exit = function()
+            vim.schedule(function()
+                vim.cmd("stopinsert")
+            end)
+        end,
+    })
+    vim.cmd("startinsert")
+
     if opts.win.kill_buffer_on_close then vim.bo.bufhidden = "wipe" end
 
     return { ok = true, msg = "" }
